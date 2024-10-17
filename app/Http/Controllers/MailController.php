@@ -2,21 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Mail;
+use App\Models\email;
 use App\Mail\DemoMail;
+use App\Models\maildetails;
+use Illuminate\Http\Request;
 
 class MailController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $mails = email::all();
         $mailData = [
-            'title' => 'Mail from ItSolutionStuff.com',
-            'body' => 'This is for testing email using smtp.'
+            'title' => $request->title,
+            'body' => $request->body,
         ];
+        maildetails::insert([
+            'title' => $request->title,
+            'body' => $request->body,
+        ]);
+        // foreach ($mails as $mail) {
+        //    dd($mail->mail);
+        // }
 
-        Mail::to('rafiawes4897@gmail.com')->send(new DemoMail($mailData));
+        foreach ($mails as $mail) {
+            Mail::to($mail->email)->send(new DemoMail($mailData));
+        }
 
-        dd("Email is sent successfully.");
+        // Mail::to('rafiawes4897@gmail.com')->send(new DemoMail($mailData));
+
+        return back();
     }
 }

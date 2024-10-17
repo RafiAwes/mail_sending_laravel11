@@ -14,12 +14,14 @@ class DemoMail extends Mailable
     use Queueable, SerializesModels;
 
     public $mailData;
+    // public $user;
     /**
      * Create a new message instance.
      */
     public function __construct($mailData)
     {
         $this->mailData = $mailData;
+        // $this->user = $user;
     }
 
     /**
